@@ -5,9 +5,11 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const port = 5000;
 const app = express();
+const cookieParser = require('cookie-parser')
 
 app.use(bodyParser.json());
 app.use(cors());
+app.use(cookieParser());
 
 try {
     mongoose.connect(process.env.MONGODB, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -25,16 +27,17 @@ try {
 
 
 const userRoutes = require('./routes/userRoutes');
-const songRoutes = require('./routes/songRoutes');
-const playlistRoutes = require('./routes/playlistRoutes');
+// const songRoutes = require('./routes/songRoutes');
+// const playlistRoutes = require('./routes/playlistRoutes');
 
 app.use('/users', userRoutes);
-app.use('/songs', songRoutes);
-app.use('/playlists', playlistRoutes);
+// app.use('/songs', songRoutes);
+// app.use('/playlists', playlistRoutes);
 
 app.use('/',(req,res) => {
     res.send("Welcome to our music app");
 })
+
 app.listen(port, () => {
     console.log(`Server is running on the port ${port}`)
 });
