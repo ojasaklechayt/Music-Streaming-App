@@ -1,7 +1,6 @@
 const User = require('../models/userModel');
-const Token = require('../models/tokenModel');
-const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const {generatejwt} = require("../middleware");
 
 exports.register = async (req, res) => {
     try {
@@ -43,19 +42,9 @@ exports.login = async (req, res) => {
         if(!check){
             return res.status(401).json({ message: 'Wrong Passed Given'});
         }
+        
+        await generatejwt(user, res);
 
-        const token = jwt.sign(
-            { user_id: user._id, email },
-            process.env.TOKEN_KEY,
-            {
-                expiresIn: "2h",
-            }
-        );
-
-        const tokenRecord = new Token({ token });
-        await tokenRecord.save();
-        // console.log(token);
-        res.cookie("token",token);
         res.status(200).json({ message: 'Login successful' });
     } catch (error) {
         console.error('Error Login User: ', error);
