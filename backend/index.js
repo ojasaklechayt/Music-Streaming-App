@@ -24,13 +24,13 @@ try {
 }
 
 
-// const userRoutes = require('./routes/userRoutes');
-// const songRoutes = require('./routes/songRoutes');
-// const playlistRoutes = require('./routes/playlistRoutes');
+const userRoutes = require('./routes/userRoutes');
+const songRoutes = require('./routes/songRoutes');
+const playlistRoutes = require('./routes/playlistRoutes');
 
-// app.use('/users', userRoutes);
-// app.use('/songs', songRoutes);
-// app.use('/playlists', playlistRoutes);
+app.use('/users', userRoutes);
+app.use('/songs', songRoutes);
+app.use('/playlists', playlistRoutes);
 
 app.use('/',(req,res) => {
     res.send("Welcome to our music app");
