@@ -1,6 +1,7 @@
 const User = require('../models/userModel');
 const bcrypt = require("bcrypt");
 const {generatejwt} = require("../middleware");
+const { default: mongoose } = require('mongoose');
 
 exports.register = async (req, res) => {
     try {
@@ -53,9 +54,42 @@ exports.login = async (req, res) => {
 };
 
 exports.profile = async (req, res) => {
+    try {
+        const _Id  = req.user._id;
+        const user = await User.findOne({_Id});
 
+        if(!user){
+            res.status(404).json({message:"User Not Found!!"});
+        }
+
+        res.status(200).json({user});
+
+    } catch (error) {
+        console.error("Error Fetching Profile: ", error);
+        res.status(500).json({message: 'Profile Retrival Failed'});
+    }
 };
 
 exports.updateProfile = async (req, res) => {
+    try {
+        const {username ,profilePicture ,bio} = req.body;
+        const userId = req.user._id;
+        
+        const user = await User.findOne({userId});
 
+        if(!user){
+            res.status(404).json({message: 'User Not Found'});
+        };
+
+        if(username) user.username = username;
+        if(profilePicture) user.profilePicture = profilePicture;
+        if(bio) user.bio = bio;
+
+        await user.save();
+
+        res.status(200).json({ message: 'Profile Updated Successfully', user });
+    } catch (error) {
+        console.error("Error Updating Profile: ", error);
+        res.status(500).json({message: 'Profile Updation Failed'});
+    }
 };
