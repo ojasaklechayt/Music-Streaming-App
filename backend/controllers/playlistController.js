@@ -22,7 +22,7 @@ exports.createPlaylist = async (req, res) => {
 
         user.createdPlaylists.push(newPlaylist._id);
         await user.save();
-        
+
         res.status(201).json(newPlaylist);
     } catch (error) {
         console.error("Error Creating Playlist: ", error);
@@ -33,18 +33,26 @@ exports.createPlaylist = async (req, res) => {
 
 exports.editPlaylist = async (req, res) => {
     try {
-        const { name, creator, songs } = req.body;
+        const { name, songs } = req.body;
         const playlistId = req.params.id;
-        console.log(playlistId);
 
         const playlist = await Playlist.findById(playlistId);
-        if (!playlist) {
-            res.status(404).json({ message: "Playlist Not Found" });
-        };
 
-        if (name) playlist.name = name;
-        if (creator) playlist.creator = creator;
-        if (songs) playlist.songs = songs;
+        if (!playlist) {
+            return res.status(404).json({ message: "Playlist Not Found" });
+        }
+
+        if (playlist.creator.toString() !== req.user._id.toString()) {
+            return res.status(403).json({ message: "Unauthorized: You are not the owner of this playlist" });
+        }
+
+        if (name) {
+            playlist.name = name;
+        }
+
+        if (songs) {
+            playlist.songs.push(...songs);
+        }
 
         await playlist.save();
         res.status(200).json(playlist);
@@ -53,7 +61,6 @@ exports.editPlaylist = async (req, res) => {
         res.status(500).json({ message: "Error Editing Playlist" });
     }
 };
-
 
 exports.deletePlaylist = async (req, res) => {
     try {
@@ -64,6 +71,16 @@ exports.deletePlaylist = async (req, res) => {
             return res.status(404).json({ message: "Playlist Not Found" });
         }
 
+        const userId = playlist.creator;
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({ message: "User Not Found" });
+        }
+
+        user.createdPlaylists.pull(playlistId);
+        await user.save();
+
         await playlist.remove();
 
         res.status(204).end();
@@ -73,7 +90,6 @@ exports.deletePlaylist = async (req, res) => {
         res.status(500).json({ message: "Error Deleting Playlist" });
     }
 };
-
 
 exports.addSongToPlaylist = async (req, res) => {
     try {
@@ -88,6 +104,10 @@ exports.addSongToPlaylist = async (req, res) => {
 
         const song = await Song.findById(songId);
 
+        if (!song) {
+            return res.status(404).json({ message: "Song Not Found" });
+        }
+        
         playlist.songs.push(song);
         await playlist.save();
         res.status(200).json(playlist);
