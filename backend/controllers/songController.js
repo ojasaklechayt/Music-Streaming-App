@@ -13,7 +13,7 @@ exports.getAllSongs = async (req, res) => {
 exports.getSongByName = async (req, res) => {
     try {
         const { name } = req.body;
-        const song = await Song.findOne({ title: name });
+        const song = await Song.findOne({ name });
 
         if (!song) {
             return res.status(404).json({ song: [] });
@@ -47,10 +47,10 @@ exports.uploadSong = async (req, res) => {
 
 exports.getSongByArtist = async (req, res) => {
     try {
-        const { artist } = req.body;
-        const song = await Song.find({ artist });
+        const { Artist } = req.query;
+        const song = await Song.find({ Artist });
 
-        if (!song || song.length === 0) {
+        if (!song) {
             return res.status(404).json({ song: [] });
         }
         res.status(200).json({ song });
@@ -62,12 +62,13 @@ exports.getSongByArtist = async (req, res) => {
 
 exports.getSongByGenre = async (req, res) => {
     try {
-        const { genre } = req.body;
-        const song = await Song.find({ genre });
+        const { Genre } = req.body;
+        const song = await Song.find({ Genre });
 
         if (!song || song.length === 0) {
             return res.status(404).json({ song: [] });
         }
+
         res.status(200).json({ song });
     } catch (error) {
         console.error("Error Fetching Specific Songs by Genre: ", error);

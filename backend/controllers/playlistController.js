@@ -4,21 +4,22 @@ const User = require('../models/userModel');
 
 exports.createPlaylist = async (req, res) => {
     try {
-        const { name, creator, songs } = req.body;
+        const { name, id, songs } = req.body;
+        
+        const user = await User.findById(id);
+
+        if (!user) {
+            return res.status(404).json({ message: "User Not Found" });
+        }
+
         const newPlaylist = new Playlist({
             name,
-            creator,
+            creator:id,
             songs: songs || []
         });
 
         await newPlaylist.save();
 
-        const userId = req.user._id;
-        const user = await User.findById(userId);
-
-        if (!user) {
-            return res.status(404).json({ message: "User Not Found" });
-        }
 
         user.createdPlaylists.push(newPlaylist._id);
         await user.save();
@@ -33,16 +34,17 @@ exports.createPlaylist = async (req, res) => {
 
 exports.editPlaylist = async (req, res) => {
     try {
-        const { name, songs } = req.body;
+        const { name, id } = req.body;
         const playlistId = req.params.id;
 
         const playlist = await Playlist.findById(playlistId);
-
+        const users = await User.find();
         if (!playlist) {
             return res.status(404).json({ message: "Playlist Not Found" });
         }
-
-        if (playlist.creator.toString() !== req.user._id.toString()) {
+        console.log(playlist.creator.toString());
+        console.log(id.toString());
+        if (playlist.creator.toString() !== id.toString()) {
             return res.status(403).json({ message: "Unauthorized: You are not the owner of this playlist" });
         }
 
@@ -50,12 +52,8 @@ exports.editPlaylist = async (req, res) => {
             playlist.name = name;
         }
 
-        if (songs) {
-            playlist.songs.push(...songs);
-        }
-
         await playlist.save();
-        res.status(200).json(playlist);
+        res.status(200).json({playlist});
     } catch (error) {
         console.error("Error Editing Playlist: ", error);
         res.status(500).json({ message: "Error Editing Playlist" });
