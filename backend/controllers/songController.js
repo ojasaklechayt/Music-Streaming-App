@@ -1,7 +1,13 @@
+// Import necessary models
 const Song = require('../models/songModel');
 const User = require('../models/userModel');
+
+// Controller functions for song-related actions
+
+// Get all songs
 exports.getAllSongs = async (req, res) => {
     try {
+        // Find all songs in the database
         const songs = await Song.find();
         res.status(200).json({ songs });
     } catch (error) {
@@ -10,9 +16,12 @@ exports.getAllSongs = async (req, res) => {
     }
 }
 
+// Get a song by name
 exports.getSongByName = async (req, res) => {
     try {
         const { name } = req.body;
+        
+        // Find a song with the provided name
         const song = await Song.findOne({ name });
 
         if (!song) {
@@ -25,16 +34,19 @@ exports.getSongByName = async (req, res) => {
     }
 }
 
+// Upload a new song
 exports.uploadSong = async (req, res) => {
     try {
         const { title, artist, genre, audioURL, owner } = req.body;
 
+        // Find the user who is the owner of the song
         const user = await User.findById(owner);
 
         if (!user) {
             return res.status(404).json({ message: "User Not Found" });
         }
 
+        // Create a new song document with the provided data
         const newSong = await Song({
             title,
             artist,
@@ -43,8 +55,10 @@ exports.uploadSong = async (req, res) => {
             owner
         });
 
+        // Save the new song to the database
         await newSong.save();
 
+        // Update the user's uploaded songs list
         user.uploadedSongs.push(newSong._id);
         await user.save();
 
@@ -55,9 +69,12 @@ exports.uploadSong = async (req, res) => {
     }
 }
 
+// Get songs by artist
 exports.getSongByArtist = async (req, res) => {
     try {
         const { Artist } = req.query;
+        
+        // Find songs with the provided artist name
         const song = await Song.find({ Artist });
 
         if (!song) {
@@ -70,9 +87,12 @@ exports.getSongByArtist = async (req, res) => {
     }
 }
 
+// Get songs by genre
 exports.getSongByGenre = async (req, res) => {
     try {
         const { Genre } = req.body;
+
+        // Find songs with the provided genre
         const song = await Song.find({ Genre });
 
         if (!song || song.length === 0) {
@@ -86,35 +106,35 @@ exports.getSongByGenre = async (req, res) => {
     }
 }
 
+// Delete a song
 exports.deleteSong = async (req, res) => {
     try {
         const userId = req.params.userId;
-        console.log(userId);
         const songID = req.params.songId;
-        console.log(songID);
+
+        // Find the song by its ID
         const song = await Song.findById(songID);
-        console.log(songID);
 
         if (!song) {
             return res.status(404).json({ message: "Song Not Found" });
         };
 
-        console.log(song.artist);
+        // Find the user by their ID
         const user = await User.findById(userId);
         if (!user) {
             return res.status(404).json({ message: "User Not Found" });
         };
 
-        const songowner = await User.find(song._id);
-        console.log(songowner.id);
-
+        // Check if the user is the owner of the song
         if (song.owner.toString() !== userId.toString()) {
-            return res.status(403).json("Unauthorized: You are not the owner of this playlist");
+            return res.status(403).json("Unauthorized: You are not the owner of this song");
         }
 
+        // Remove the song from the user's uploaded songs list
         user.uploadedSongs.pull(songID);
         await user.save();
 
+        // Delete the song from the database
         await Song.deleteOne({ _id: songID });
 
         res.status(204).end({ message: "Song Deleted Successfully!!" });
@@ -126,22 +146,26 @@ exports.deleteSong = async (req, res) => {
     }
 }
 
+// Edit a song
 exports.editSong = async (req, res) => {
     try {
         const songId = req.params.songId;
         const { title, artist, genre } = req.body;
         const userId = req.body.userId;
 
+        // Find the song by its ID
         const song = await Song.findById(songId);
 
         if (!song) {
             return res.status(404).json({ message: "Song Not Found" });
         }
 
+        // Check if the user is the owner of the song
         if (song.owner.toString() !== userId) {
             return res.status(403).json({ message: "Unauthorized: You are not the owner of this song" });
         }
 
+        // Update the song data with the provided information
         const updatedSong = await Song.findByIdAndUpdate(songId, { title, artist, genre }, { new: true });
 
         res.status(200).json(updatedSong);
@@ -152,13 +176,16 @@ exports.editSong = async (req, res) => {
     }
 }
 
+// Get songs by user
 exports.getSongByUser = async (req, res) => {
     try {
         const userId = req.params.userId;
-        const song = await Song.find({owner: userId});
 
-        if(!song){
-            return res.status(404).json({message:"No Songs Found"});
+        // Find songs owned by the user
+        const song = await Song.find({ owner: userId });
+
+        if (!song) {
+            return res.status(404).json({ message: "No Songs Found" });
         }
 
         res.status(200).json(song);
