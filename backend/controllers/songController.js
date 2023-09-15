@@ -27,9 +27,9 @@ exports.getSongByName = async (req, res) => {
 
 exports.uploadSong = async (req, res) => {
     try {
-        const { title, artist, genre, audioURL, id } = req.body;
+        const { title, artist, genre, audioURL, owner } = req.body;
 
-        const user = await User.findById(id);
+        const user = await User.findById(owner);
 
         if (!user) {
             return res.status(404).json({ message: "User Not Found" });
@@ -39,7 +39,8 @@ exports.uploadSong = async (req, res) => {
             title,
             artist,
             genre,
-            audioURL
+            audioURL,
+            owner
         });
 
         await newSong.save();
@@ -82,5 +83,88 @@ exports.getSongByGenre = async (req, res) => {
     } catch (error) {
         console.error("Error Fetching Specific Songs by Genre: ", error);
         res.status(500).json({ message: "Error Fetching Specific Songs by Genre" });
+    }
+}
+
+exports.deleteSong = async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        console.log(userId);
+        const songID = req.params.songId;
+        console.log(songID);
+        const song = await Song.findById(songID);
+        console.log(songID);
+
+        if (!song) {
+            return res.status(404).json({ message: "Song Not Found" });
+        };
+
+        console.log(song.artist);
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: "User Not Found" });
+        };
+
+        const songowner = await User.find(song._id);
+        console.log(songowner.id);
+
+        if (song.owner.toString() !== userId.toString()) {
+            return res.status(403).json("Unauthorized: You are not the owner of this playlist");
+        }
+
+        user.uploadedSongs.pull(songID);
+        await user.save();
+
+        await Song.deleteOne({ _id: songID });
+
+        res.status(204).end({ message: "Song Deleted Successfully!!" });
+        console.log("Song Deleted Successfully!!");
+
+    } catch (error) {
+        console.error("Song Deletion Error: ", error);
+        res.status(500).json({ message: "Song Deletion Error" });
+    }
+}
+
+exports.editSong = async (req, res) => {
+    try {
+        const songId = req.params.songId;
+        const { title, artist, genre } = req.body;
+        const userId = req.body.userId;
+
+        const song = await Song.findById(songId);
+
+        if (!song) {
+            return res.status(404).json({ message: "Song Not Found" });
+        }
+
+        if (song.owner.toString() !== userId) {
+            return res.status(403).json({ message: "Unauthorized: You are not the owner of this song" });
+        }
+
+        const updatedSong = await Song.findByIdAndUpdate(songId, { title, artist, genre }, { new: true });
+
+        res.status(200).json(updatedSong);
+        console.log("Song Edited Successfully!!");
+    } catch (error) {
+        console.error("Error Editing Song: ", error);
+        res.status(500).json({ message: "Song Editing Error" });
+    }
+}
+
+exports.getSongByUser = async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        const song = await Song.find({owner: userId});
+
+        if(!song){
+            return res.status(404).json({message:"No Songs Found"});
+        }
+
+        res.status(200).json(song);
+        console.log("Songs Found");
+    } catch (error) {
+        console.error("Error Editing Song: ", error);
+        res.status(500).json({ message: "Song Editing Error" });
     }
 }

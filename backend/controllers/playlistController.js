@@ -38,7 +38,6 @@ exports.editPlaylist = async (req, res) => {
         const playlistId = req.params.id;
 
         const playlist = await Playlist.findById(playlistId);
-        const users = await User.find();
         if (!playlist) {
             return res.status(404).json({ message: "Playlist Not Found" });
         }
@@ -79,6 +78,10 @@ exports.deletePlaylist = async (req, res) => {
             return res.status(404).json({ message: "User Not Found" });
         }
 
+        if (playlist.creator.toString() !== userId.toString()) {
+            return res.status(403).json({ message: "Unauthorized: You are not the owner of this playlist" });
+        }
+        
         user.createdPlaylists.pull(playlistId);
         await user.save();
 

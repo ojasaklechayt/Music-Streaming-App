@@ -9,7 +9,7 @@ router.get('/name',songController.getSongByName);
 router.get('/artist',songController.getSongByArtist);
 router.get('/genre', songController.getSongByGenre);
 router.post('/',songController.uploadSong);
-//delete song
-//edit song
-//get songs by user
+router.delete('/:userId/:songId', songController.deleteSong);
+router.put('/editsong/:songId', songController.editSong);
+router.get('/:userId', songController.getSongByUser);
 module.exports = router;
