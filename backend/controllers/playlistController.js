@@ -5,7 +5,7 @@ const User = require('../models/userModel');
 exports.createPlaylist = async (req, res) => {
     try {
         const { name, id, songs } = req.body;
-        
+
         const user = await User.findById(id);
 
         if (!user) {
@@ -14,7 +14,7 @@ exports.createPlaylist = async (req, res) => {
 
         const newPlaylist = new Playlist({
             name,
-            creator:id,
+            creator: id,
             songs: songs || []
         });
 
@@ -34,7 +34,7 @@ exports.createPlaylist = async (req, res) => {
 
 exports.editPlaylist = async (req, res) => {
     try {
-        const { name, id } = req.body;
+        const { name, userId } = req.body;
         const playlistId = req.params.id;
 
         const playlist = await Playlist.findById(playlistId);
@@ -42,9 +42,12 @@ exports.editPlaylist = async (req, res) => {
         if (!playlist) {
             return res.status(404).json({ message: "Playlist Not Found" });
         }
+        if (!userId || typeof userId !== 'string') {
+            return res.status(400).json({ message: "Invalid user ID" });
+        }
         console.log(playlist.creator.toString());
-        console.log(id.toString());
-        if (playlist.creator.toString() !== id.toString()) {
+        console.log(userId);
+        if (playlist.creator.toString() !== userId.toString()) {
             return res.status(403).json({ message: "Unauthorized: You are not the owner of this playlist" });
         }
 
@@ -53,7 +56,7 @@ exports.editPlaylist = async (req, res) => {
         }
 
         await playlist.save();
-        res.status(200).json({playlist});
+        res.status(200).json({ playlist });
     } catch (error) {
         console.error("Error Editing Playlist: ", error);
         res.status(500).json({ message: "Error Editing Playlist" });
@@ -79,9 +82,9 @@ exports.deletePlaylist = async (req, res) => {
         user.createdPlaylists.pull(playlistId);
         await user.save();
 
-        await playlist.remove();
+        await Playlist.deleteOne({ _id: playlistId });
 
-        res.status(204).end();
+        res.status(204).end({ message: "Playlist Deleted Successfully!!" });
         console.log("Playlist Deleted Successfully!!");
     } catch (error) {
         console.error("Error Deleting Playlist: ", error);
@@ -105,7 +108,15 @@ exports.addSongToPlaylist = async (req, res) => {
         if (!song) {
             return res.status(404).json({ message: "Song Not Found" });
         }
-        
+
+        const songExistsInPlaylist = playlist.songs.some((playlistSong) =>
+            playlistSong.equals(song._id)
+        );
+
+        if (songExistsInPlaylist) {
+            return res.status(400).json({ message: "Song already exists in the playlist" });
+        }
+
         playlist.songs.push(song);
         await playlist.save();
         res.status(200).json(playlist);
@@ -153,5 +164,55 @@ exports.findPlaylistsByUser = async (req, res) => {
     } catch (error) {
         console.error('Error Fetching Playlists For User: ', error);
         res.status(500).json({ message: "Error Fetching Playlists For User" });
+    }
+};
+
+exports.getAllPlaylists = async (req,res) => {
+    try {
+        const playlists = await Playlist.find();
+
+        if(!playlists || playlists.length === 0){
+            return res.status(404).json({message:"No Playlist Found"});
+        }
+
+        res.status(200).json(playlists);
+    } catch (error) {
+        console.error('Error Getting All The Playlist: ', error);
+        res.status(500).json({message: "Error Getting All The Playlists"});
+    }
+};
+
+exports.getPlaylistbyId = async(req,res) => {
+    try {
+        const playlistId = req.params.id;
+
+        const playlist = await Playlist.find({playlistId});
+
+        if(!playlist || playlist.length === 0){
+            return res.status(404).json({message: "No Playlist Found by ID"});
+        }
+
+        res.status(200).json(playlist);
+    } catch (error) {
+        console.error('Error Fetching Specific Playlist: ', error);
+        res.status(500).json({message:"Error Fetching Specific Playlist"});
+    }
+};
+
+exports.getAllSongsFromPlaylist = async(req,res) => {
+    try {
+        const playlistId = req.params.id;
+        const playlist = await Playlist.findById(playlistId);
+
+        if(!playlist){
+            return res.status(404).json({ message: "Playlist Not Found" });
+        }
+
+        const songs = await Song.find({ _id: {$in: playlist.songs} });
+
+        res.status(200).json(songs);
+    } catch (error) {
+        console.error('Error Fetching Songs From Playlist: ', error);
+        res.status(500).json({message:"Error Fetching Songs From Playlist"});
     }
 };

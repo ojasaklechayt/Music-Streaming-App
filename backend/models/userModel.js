@@ -21,6 +21,10 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Playlist',
     }],
+    uploadedSongs:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Song'
+    }]
 });
 
 const User = mongoose.model('User', userSchema);

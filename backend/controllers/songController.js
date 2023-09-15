@@ -1,5 +1,5 @@
 const Song = require('../models/songModel');
-
+const User = require('../models/userModel');
 exports.getAllSongs = async (req, res) => {
     try {
         const songs = await Song.find();
@@ -27,7 +27,13 @@ exports.getSongByName = async (req, res) => {
 
 exports.uploadSong = async (req, res) => {
     try {
-        const { title, artist, genre, audioURL } = req.body;
+        const { title, artist, genre, audioURL, id } = req.body;
+
+        const user = await User.findById(id);
+
+        if (!user) {
+            return res.status(404).json({ message: "User Not Found" });
+        }
 
         const newSong = await Song({
             title,
@@ -38,7 +44,10 @@ exports.uploadSong = async (req, res) => {
 
         await newSong.save();
 
-        res.status(201).json({ message: "Song Uploaded Successfully", song: newSong });
+        user.uploadedSongs.push(newSong._id);
+        await user.save();
+
+        res.status(201).json({ message: "Song Uploaded Successfully", song: newSong, user: user });
     } catch (error) {
         console.error("Error Uploading Data: ", error);
         res.status(500).json({ message: "Error Uploading Data" });
