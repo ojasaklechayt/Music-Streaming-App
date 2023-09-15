@@ -45,7 +45,7 @@ app.use('/songs', cors(), songRoutes);
 app.use('/playlists', cors(), playlistRoutes);
 
 // Define a default route that responds with a welcome message
-app.use('/', cors(), (res) => {
+app.use('/', cors(), (req, res) => {
     res.send("Welcome to our music app");
 })
 
