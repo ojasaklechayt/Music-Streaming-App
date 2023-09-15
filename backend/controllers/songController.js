@@ -5,7 +5,7 @@ const User = require('../models/userModel');
 // Controller functions for song-related actions
 
 // Get all songs
-exports.getAllSongs = async (req, res) => {
+exports.getAllSongs = async (res) => {
     try {
         // Find all songs in the database
         const songs = await Song.find();
@@ -117,13 +117,13 @@ exports.deleteSong = async (req, res) => {
 
         if (!song) {
             return res.status(404).json({ message: "Song Not Found" });
-        };
+        }
 
         // Find the user by their ID
         const user = await User.findById(userId);
         if (!user) {
             return res.status(404).json({ message: "User Not Found" });
-        };
+        }
 
         // Check if the user is the owner of the song
         if (song.owner.toString() !== userId.toString()) {

@@ -56,8 +56,7 @@ const verifyjwt = async (req, res, next) => {
 
         // Continue to the next middleware or route
         next();
-    } catch (error) {
-        // If an error occurs during token verification, return Unauthorized
+    } catch {
         return res.status(401).json({ message: "Unauthorized" });
     }
 };

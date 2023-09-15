@@ -194,7 +194,7 @@ exports.findPlaylistsByUser = async (req, res) => {
 };
 
 // Get all playlists
-exports.getAllPlaylists = async (req, res) => {
+exports.getAllPlaylists = async (res) => {
     try {
         // Find and retrieve all playlists
         const playlists = await Playlist.find();
