@@ -1,6 +1,6 @@
 # Music-Streaming-App
 
-## Backend for Your Music App
+## Backend for Music Streaming App
 
 Welcome to the backend section for Music Streaming App! This repository contains the server-side code responsible for handling user authentication, managing playlists, and serving music-related data. This README will guide you through setting up the backend code and provide an overview of its structure and functionality.
 
