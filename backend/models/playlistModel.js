@@ -18,6 +18,7 @@ const playlistSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Song', // Reference to the 'Song' model
     }],
+    playlistPhoto: String
 });
 
 // Create a 'Playlist' model using the defined schema

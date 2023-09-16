@@ -8,7 +8,7 @@ const User = require('../models/userModel');
 // Create a new playlist
 exports.createPlaylist = async (req, res) => {
     try {
-        const { name, id, songs } = req.body;
+        const { name, id, songs, playlistPhoto } = req.body;
 
         // Find the user by their ID
         const user = await User.findById(id);
@@ -21,7 +21,8 @@ exports.createPlaylist = async (req, res) => {
         const newPlaylist = new Playlist({
             name,
             creator: id,
-            songs: songs || []
+            songs: songs || [],
+            playlistPhoto
         });
 
         // Save the new playlist
@@ -41,7 +42,7 @@ exports.createPlaylist = async (req, res) => {
 // Edit an existing playlist
 exports.editPlaylist = async (req, res) => {
     try {
-        const { name, userId } = req.body;
+        const { name, userId, playlistPhoto } = req.body;
         const playlistId = req.params.id;
 
         // Find the playlist by its ID
@@ -63,6 +64,10 @@ exports.editPlaylist = async (req, res) => {
         // Update the playlist's name if provided
         if (name) {
             playlist.name = name;
+        }
+
+        if(playlistPhoto) {
+            playlist.playlistPhoto = playlistPhoto;
         }
 
         await playlist.save();

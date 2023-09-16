@@ -37,7 +37,7 @@ exports.getSongByName = async (req, res) => {
 // Upload a new song
 exports.uploadSong = async (req, res) => {
     try {
-        const { title, artist, genre, audioURL, owner } = req.body;
+        const { title, artist, genre, audioURL, owner, SongPhoto } = req.body;
 
         // Find the user who is the owner of the song
         const user = await User.findById(owner);
@@ -52,7 +52,8 @@ exports.uploadSong = async (req, res) => {
             artist,
             genre,
             audioURL,
-            owner
+            owner,
+            SongPhoto
         });
 
         // Save the new song to the database
@@ -150,7 +151,7 @@ exports.deleteSong = async (req, res) => {
 exports.editSong = async (req, res) => {
     try {
         const songId = req.params.songId;
-        const { title, artist, genre } = req.body;
+        const { title, artist, genre, SongPhoto } = req.body;
         const userId = req.body.userId;
 
         // Find the song by its ID
@@ -166,7 +167,7 @@ exports.editSong = async (req, res) => {
         }
 
         // Update the song data with the provided information
-        const updatedSong = await Song.findByIdAndUpdate(songId, { title, artist, genre }, { new: true });
+        const updatedSong = await Song.findByIdAndUpdate(songId, { title, artist, genre, SongPhoto }, { new: true });
 
         res.status(200).json(updatedSong);
         console.log("Song Edited Successfully!!");

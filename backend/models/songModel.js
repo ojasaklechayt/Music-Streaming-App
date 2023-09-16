@@ -28,7 +28,8 @@ const songSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User', // Reference to the 'User' model
         required: true, // The 'owner' field is required
-    }
+    },
+    SongPhoto: String
 });
 
 // Create a 'Song' model using the defined schema
