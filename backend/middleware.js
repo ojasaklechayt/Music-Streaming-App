@@ -29,6 +29,33 @@ const generatejwt = async (user, res) => {
     res.cookie("token", token);
 }
 
+// Function to clear the "token" cookie on the client side
+const clearTokenCookie = (res) => {
+    res.clearCookie("token");
+};
+
+// Function to log out the user by clearing the token on both client and server sides
+const logout = async (req, res) => {
+    try {
+        const token = req.cookies.token;
+
+        if (!token) {
+            return res.status(200).json({ message: "Logged out successfully" });
+        }
+
+        // Delete the token from the database (if it exists)
+        await Token.findOneAndDelete({ token });
+
+        // Clear the token cookie on the client side
+        clearTokenCookie(res);
+
+        res.status(200).json({ message: "Logged out successfully" });
+    } catch (error) {
+        console.error("Logout error:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+};
+
 // Middleware function to verify the JWT token from a cookie and authenticate the user
 const verifyjwt = async (req, res, next) => {
     try {
@@ -62,4 +89,4 @@ const verifyjwt = async (req, res, next) => {
 };
 
 // Export the generatejwt and verifyjwt functions for use in other parts of the application
-module.exports = { generatejwt, verifyjwt };
+module.exports = { generatejwt, verifyjwt, logout };
