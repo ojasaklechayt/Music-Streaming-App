@@ -48,9 +48,9 @@ export default function Home() {
             Groove<span className='text-[#1D60A0]'>wave</span>
           </h1>
           <p className='font-koulen text-[1rem] md:text-[1.1rem] lg:text-[1.4rem]'>
-            "Ride the GrooveWave: Your Sound, Your Vibe, Your Way!"
+          &quot;Ride the GrooveWave: Your Sound, Your Vibe, Your Way!&quot;
           </p>
-          <p className='font-poppins text-[0.9rem] md:text-[0.9rem] lg:text-[1rem] px-[10%]'>Are you ready to dive into a world of limitless music possibilities? GrooveWave is your passport to a universe of sounds, rhythms, and melodies. Whether you're a passionate music lover, an avid collector, or just looking for your next favorite song, GrooveWave has you covered</p>
+          <p className='font-poppins text-[0.9rem] md:text-[0.9rem] lg:text-[1rem] px-[10%]'>Are you ready to dive into a world of limitless music possibilities? GrooveWave is your passport to a universe of sounds, rhythms, and melodies. Whether you&apos;re a passionate music lover, an avid collector, or just looking for your next favorite song, GrooveWave has you covered</p>
         </div>
         <div className='hidden md:block md:mr-[-45%] lg:mr-[-35%] animate-spin animate-spin-slow'>
           <Image src={Disk} alt='Disk' />
