@@ -21,7 +21,6 @@ const songSchema = new mongoose.Schema({
     // Define the 'audioURL' field for the song with a String type
     audioURL: {
         type: String,
-        required: true, // The 'audioURL' field is required
     },
     // Define the 'owner' field as a reference to a User object (ObjectId)
     owner: {
@@ -29,7 +28,12 @@ const songSchema = new mongoose.Schema({
         ref: 'User', // Reference to the 'User' model
         required: true, // The 'owner' field is required
     },
-    SongPhoto: String
+    SongPhoto: String,
+    // Define the 'audio' field to store the audio data as a Buffer
+    audio: {
+        data: Buffer, // Store audio data as a Buffer
+        contentType: String, // Store the content type (e.g., 'audio/mp3')
+    },
 });
 
 // Create a 'Song' model using the defined schema

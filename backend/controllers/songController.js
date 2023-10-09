@@ -20,7 +20,7 @@ exports.getAllSongs = async (res) => {
 exports.getSongByName = async (req, res) => {
     try {
         const { name } = req.body;
-        
+
         // Find a song with the provided name
         const song = await Song.findOne({ name });
 
@@ -34,10 +34,10 @@ exports.getSongByName = async (req, res) => {
     }
 }
 
-// Upload a new song
+// Upload a new song in form-data format
 exports.uploadSong = async (req, res) => {
     try {
-        const { title, artist, genre, audioURL, owner, SongPhoto } = req.body;
+        const { title, artist, genre, owner } = req.body;
 
         // Find the user who is the owner of the song
         const user = await User.findById(owner);
@@ -46,14 +46,19 @@ exports.uploadSong = async (req, res) => {
             return res.status(404).json({ message: "User Not Found" });
         }
 
-        // Create a new song document with the provided data
-        const newSong = await Song({
+        const audioData = req.files.audio.data;
+        const audioContentType = req.files.audio.mimetype;
+
+        // Create a new song document with the provided data and audio
+        const newSong = new Song({
             title,
             artist,
             genre,
-            audioURL,
             owner,
-            SongPhoto
+            audio: {
+                data: audioData,
+                contentType: audioContentType,
+            },
         });
 
         // Save the new song to the database
@@ -74,7 +79,7 @@ exports.uploadSong = async (req, res) => {
 exports.getSongByArtist = async (req, res) => {
     try {
         const { Artist } = req.query;
-        
+
         // Find songs with the provided artist name
         const song = await Song.find({ Artist });
 
