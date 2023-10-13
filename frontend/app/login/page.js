@@ -50,7 +50,7 @@ export default function Login() {
                                         <button type="submit" className="w-[50%] bg-white text-black font-bold rounded-md py-2 mt-7 px-3 sm:px-4 duration-50 text-sm sm:text-base font-poppins hover:bg-gray-300 hover:cursor-pointer transition duration-300 ease-in-out">Log In</button>
                                     </form>
                                     <p className="font-poppins text-center mt-2 pt-5">
-                                        Don't have an account?{" "}
+                                        Don&apos;t have an account?{" "}
                                     </p>
                                     <Link href="/register">
                                         <p className="font-poppins text-center z-10">
