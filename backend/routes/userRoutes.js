@@ -13,6 +13,10 @@ router.post('/register', userController.register);
 // Route to handle user login
 router.post('/login', userController.login);
 
+// Route to get user profile information
+router.get('/profile', userController.profile);
+
+router.get('/verify', verifyjwt);
 // Apply the verifyjwt middleware to the routes below to ensure authentication is required
 router.use(verifyjwt);
 
@@ -22,8 +26,6 @@ router.post('/logout', logout);
 // Route to update user profile information
 router.put('/profile/update', userController.updateProfile);
 
-// Route to get user profile information
-router.get('/profile', userController.profile);
 
 // Export the router with defined routes for use in other parts of the application
 module.exports = router;
