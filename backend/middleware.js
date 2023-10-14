@@ -1,7 +1,7 @@
 // Import necessary modules and packages
 const Token = require('./models/tokenModel'); // Import the Token model for working with tokens
 const jwt = require("jsonwebtoken"); // Import the JSON Web Token (JWT) package
-
+const catchAsync = require("./utils/catchAsync"); // Import the catchAsync utility function
 // Function to generate a JWT token for a user and set it in a cookie
 const generatejwt = async (user, res) => {
     // Extract user information like _id and email
@@ -56,6 +56,27 @@ const logout = async (req, res) => {
     }
 };
 
+const verifyToken = catchAsync(async (req, res, next) => {
+    const bearer = req.cookies.token;
+
+    if (!bearer) return res.status(401).json({message: "You are not Authenticated"});
+
+    try {
+        const authData = jwt.verify(bearer, process.env.TOKEN_KEY);
+
+        return res.status(200).json({
+            status: "success",
+            data: { authData },
+        });
+
+    } catch (error) {
+        return res.status(401).json({
+            status: "failure",
+            data: { error },
+        });
+    }
+});
+
 // Middleware function to verify the JWT token from a cookie and authenticate the user
 const verifyjwt = async (req, res, next) => {
     try {
@@ -75,7 +96,7 @@ const verifyjwt = async (req, res, next) => {
 
         // If the token does not exist in the database, return Unauthorized
         if (!tokenRecord) {
-            return res.status(401).json({ message: "Unauthorized" });
+            return res.status(401).json({ message: "You are not Loggedin please Login" });
         }
 
         // Attach the decoded user data to the request object for further use
@@ -89,4 +110,4 @@ const verifyjwt = async (req, res, next) => {
 };
 
 // Export the generatejwt and verifyjwt functions for use in other parts of the application
-module.exports = { generatejwt, verifyjwt, logout };
+module.exports = { generatejwt, verifyjwt, logout, verifyToken };

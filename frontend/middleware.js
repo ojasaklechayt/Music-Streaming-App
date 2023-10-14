@@ -7,21 +7,22 @@ const protectedRoutes = ['/home', '/profile'];
 export async function middleware(request) {
     const token = getCookie("token", {
         req: request,
+        res: NextResponse
     });
 
-    const response = await fetch("https://music-streaming-app.onrender.com/users/verify", {
+    console.log({ token });
+
+    console.log("token: ", token);
+    const response = await fetch("http://localhost:5000/users/verify", {
         headers: new Headers({
             Authorization: "Bearer " + token,
         }),
     });
+
+    console.log(response);
     const data = await response.json();
 
     console.log(data);
-    if (token) {
-        console.log("token: ", token);
-    } else {
-        console.log("no token");
-    }
 
     return NextResponse.next(null, { status: 401 });
     // if (!token) {
@@ -55,4 +56,6 @@ export async function middleware(request) {
     // }
 }
 
-export default middleware;
+export const config = {
+    matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+};
