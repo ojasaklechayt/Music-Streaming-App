@@ -4,20 +4,34 @@ import Navbar from '@/components/navbar';
 import Abstract from '../../public/abstract_figures.png';
 import Link from 'next/link'; // Make sure to import Link
 import Image from 'next/image';
-
+import axios from 'axios';
 export default function Login() {
-    const handleLogin = () => {
-        // Add your login logic here
-    }
+    const [formData, setFormData] = useState({
+        email: '',
+        password: '',
+    });
 
     const handleInputChange = (e) => {
-        // Handle input change
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
     }
 
-    const formData = {
-        email: '', // Initialize with default values
-        password: '', // Initialize with default values
-    };
+    const handleLogin = async (e) => {
+        e.preventDefault();
+
+        try {
+            // Send a POST request using Axios
+            const response = await axios.post('http://localhost:5000/users/login', formData);
+            console.log('Login successful:', response.data);
+            // Handle the response or redirection after a successful login.
+        } catch (error) {
+            console.error('Login failed:', error);
+            // Handle the error, show a message, or do something else on failure.
+        }
+    }
 
     return (
         <div>
@@ -37,14 +51,16 @@ export default function Login() {
                                     <h1 className="text-xl text-center font-bold leading-tight tracking-tight md:text-2xl text-white">
                                         LOGIN
                                     </h1>
-                                    <form className="space-y-4 md:space-y-6">
+                                    <form className="space-y-4 md:space-y-6" onSubmit={handleLogin}>
                                         <div>
                                             <label htmlFor="email" className="block mb-2 text-sm font-bold text-white">Email</label>
-                                            <input type="email" name="email" id="email" className="bg-[#3A6A70] text-white placeholder-white sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Enter your email" required="" />
+                                            <input type="email" name="email" id="email" className="bg-[#3A6A70] text-white placeholder-white sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Enter your email" required="" value={formData.email}
+                                                onChange={handleInputChange} />
                                         </div>
                                         <div>
                                             <label htmlFor="password" className="block mb-2 text-sm font-bold text-white">Password</label>
-                                            <input type="password" name="password" id="password" placeholder="Enter your password" className="bg-[#3A6A70] text-white placeholder-white sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" required="" />
+                                            <input type="password" name="password" id="password" placeholder="Enter your password" className="bg-[#3A6A70] text-white placeholder-white sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" required="" value={formData.password}
+                                                onChange={handleInputChange} />
                                         </div>
 
                                         <button type="submit" className="w-[50%] bg-white text-black font-bold rounded-md py-2 mt-7 px-3 sm:px-4 duration-50 text-sm sm:text-base font-poppins hover:bg-gray-300 hover:cursor-pointer transition duration-300 ease-in-out">Log In</button>

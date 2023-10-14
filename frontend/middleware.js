@@ -5,7 +5,7 @@ const authPath = ['/', '/login', '/register'];
 const protectedRoutes = ['/home', '/profile'];
 
 export async function middleware(request) {
-    const token = request.cookies.get('token');
+    const token = getCookie(request, 'token');
 
     console.log({ token });
     const response = await fetch("http://localhost:5000/users/verify", {

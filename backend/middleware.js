@@ -16,6 +16,9 @@ const generatejwt = async (user, res) => {
         }
     );
 
+    // Set the token in a cookie named "token"
+    res.cookie("token", token);
+
     // Create a new Token record in the database to keep track of tokens
     const tokenRecord = new Token({ token });
 
@@ -24,9 +27,6 @@ const generatejwt = async (user, res) => {
 
     // Log the generated token for debugging (remove in production)
     console.log(token);
-
-    // Set the token in a cookie named "token"
-    res.cookie("token", token);
 }
 
 // Function to clear the "token" cookie on the client side
@@ -59,7 +59,7 @@ const logout = async (req, res) => {
 const verifyToken = catchAsync(async (req, res, next) => {
     const bearer = req.cookies.token;
 
-    if (!bearer) return res.status(401).json({message: "You are not Authenticated"});
+    if (!bearer) return res.status(401).json({ message: "You are not Authenticated" });
 
     try {
         const authData = jwt.verify(bearer, process.env.TOKEN_KEY);

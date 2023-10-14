@@ -16,15 +16,6 @@ app.use(cors());
 
 // Use middleware to parse cookies
 app.use(cookieParser());
-app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header(
-        "Access-Control-Allow-Headers",
-        "Origin, X-Requested-With, Content-Type, Accept"
-    );
-
-    next();
-});
 
 try {
     // Connect to MongoDB using the URL provided in the .env file
