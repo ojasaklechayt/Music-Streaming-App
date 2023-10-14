@@ -2,7 +2,8 @@
 const User = require('../models/userModel');
 const bcrypt = require("bcrypt");
 const { generatejwt } = require("../middleware");
-
+const Token = require("../models/tokenModel");
+const jwt = require("jsonwebtoken");
 // Controller functions for user-related actions
 
 // Register a new user
@@ -58,9 +59,24 @@ exports.login = async (req, res) => {
         }
 
         // Generate a JWT token for the user and set it as a cookie
-        await generatejwt(user, res);
+        const token = jwt.sign(
+            { user_id: user._id, email:user.email },
+            process.env.TOKEN_KEY, // Use the TOKEN_KEY from environment variables as the secret key
+            {
+                expiresIn: "2h", // Token expires in 2 hours
+            }
+        );
+    
+        console.log(token);
+        // Create a new Token record in the database to keep track of tokens
+        const tokenRecord = new Token({ token });
+    
+        // Save the token record to the database
+        await tokenRecord.save();
 
-        res.status(200).json({ message: 'Login successful' });
+        // console.log(Usertoken);
+        res.cookie("token", token).status(200).json({ status: 'success', data: { user, token } });
+        // res.status(200).json({message:"Successfull"});
     } catch (error) {
         console.error('Error Login User: ', error);
         res.status(500).json({ message: 'Login failed' });

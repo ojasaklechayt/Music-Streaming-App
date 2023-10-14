@@ -5,26 +5,21 @@ const authPath = ['/', '/login', '/register'];
 const protectedRoutes = ['/home', '/profile'];
 
 export async function middleware(request) {
-    const token = getCookie("token", {
-        req: request,
-        res: NextResponse
-    });
+    const token = request.cookies.get('token');
 
     console.log({ token });
-
-    console.log("token: ", token);
     const response = await fetch("http://localhost:5000/users/verify", {
         headers: new Headers({
             Authorization: "Bearer " + token,
         }),
     });
 
-    console.log(response);
+    // console.log(response);
     const data = await response.json();
 
-    console.log(data);
+    // console.log(data);
 
-    return NextResponse.next(null, { status: 401 });
+    return NextResponse.next();
     // if (!token) {
     //     if (authPath.includes(request.url)) {
     //         return NextResponse.next();

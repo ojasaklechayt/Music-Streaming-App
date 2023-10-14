@@ -9,13 +9,22 @@ const app = express(); // Create an instance of the Express application
 const cookieParser = require('cookie-parser') // Middleware for parsing cookies
 
 // Use middleware to parse JSON request bodies
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
 
 // Enable CORS to allow cross-origin requests
 app.use(cors());
 
 // Use middleware to parse cookies
 app.use(cookieParser());
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header(
+        "Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content-Type, Accept"
+    );
+
+    next();
+});
 
 try {
     // Connect to MongoDB using the URL provided in the .env file
@@ -40,9 +49,11 @@ const songRoutes = require('./routes/songRoutes');
 const playlistRoutes = require('./routes/playlistRoutes');
 
 // Use routes and apply CORS middleware to specific routes
-app.use('/users', cors(), userRoutes);
-app.use('/songs', cors(), songRoutes);
-app.use('/playlists', cors(), playlistRoutes);
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ extended: true, limit: "50mb" }));
+app.use('/users', userRoutes);
+app.use('/songs', songRoutes);
+app.use('/playlists', playlistRoutes);
 
 // Define a default route that responds with a welcome message
 app.use('/', cors(), (req, res) => {
