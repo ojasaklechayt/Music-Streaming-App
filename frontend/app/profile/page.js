@@ -1,5 +1,7 @@
 // pages/profile.js
 'use client'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 
 // Dummy user data for testing
@@ -23,7 +25,12 @@ export default function Profile() {
                     alt={`${user.username}'s profile picture`}
                     className="w-32 h-32 mx-auto rounded-full"
                 />
-                <h2 className="text-2xl font-semibold text-center">{user.username}</h2>
+                <div className='flex flex-row justify-center'>
+                    <h2 className="text-2xl font-semibold text-center">{user.username}</h2>
+                    <span className="ml-2 text-gray-500 cursor-pointer pt-1">
+                        <FontAwesomeIcon icon={faEdit} />
+                    </span>
+                </div>
                 <p className=" text-center">{user.bio}</p>
                 <div className="mt-4">
                     <h3 className="text-lg font-semibold">Email:</h3>
