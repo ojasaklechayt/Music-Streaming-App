@@ -56,10 +56,16 @@ exports.login = async (req, res) => {
             return res.status(401).json({ message: 'Wrong Password Given' });
         }
 
+        const tokenData = {
+            id: user._id,
+            username: user.username,
+            email: user.email
+        }
+
         generatejwt(user, res);
 
         // console.log(Usertoken);
-        res.status(200).json({ status: 'success', data: { user } });
+        res.status(200).json({ status: 'success', tokenData });
         // res.status(200).json({message:"Successfull"});
     } catch (error) {
         console.error('Error Login User: ', error);
@@ -70,7 +76,7 @@ exports.login = async (req, res) => {
 // Fetch user profile
 exports.profile = async (req, res) => {
     try {
-        const _Id  = req.user._id;
+        const _Id = req.user._id;
 
         // Find the user by their ID
         const user = await User.findOne({ _id: _Id });
