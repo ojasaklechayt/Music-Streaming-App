@@ -56,7 +56,7 @@ export default function Login() {
                                     <p className="font-poppins text-center mt-2 pt-5">
                                         Already have an account?{" "}
                                     </p>
-                                    <Link href="/register">
+                                    <Link href="/login">
                                         <p className="font-poppins text-center z-10">
                                             <span className="text-[#3AE7FF] hover:cursor-pointer hover:underline" style={{ zIndex: 10 }}>
                                                 Login Now!
