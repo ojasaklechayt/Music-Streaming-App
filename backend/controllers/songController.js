@@ -1,7 +1,8 @@
 // Import necessary models
 const Song = require('../models/songModel');
 const User = require('../models/userModel');
-
+const fs = require('fs');
+const path = require('path');
 // Controller functions for song-related actions
 
 // Get all songs
@@ -152,7 +153,6 @@ exports.deleteSong = async (req, res) => {
     }
 }
 
-// Edit a song
 exports.editSong = async (req, res) => {
     try {
         const songId = req.params.songId;
@@ -171,8 +171,20 @@ exports.editSong = async (req, res) => {
             return res.status(403).json({ message: "Unauthorized: You are not the owner of this song" });
         }
 
-        // Update the song data with the provided information
-        const updatedSong = await Song.findByIdAndUpdate(songId, { title, artist, genre, SongPhoto }, { new: true });
+        // Convert the base64-encoded image data to a buffer
+        const imageBuffer = Buffer.from(SongPhoto, 'base64');
+
+        // Generate a unique file name
+        const uniqueFileName = `${songId}-${Date.now()}.jpg`;
+
+        // Define the file path
+        const filePath = path.join(__dirname, 'uploads', uniqueFileName);
+
+        // Write the image data to the file
+        fs.writeFileSync(filePath, imageBuffer);
+
+        // Update the song data with the file path
+        const updatedSong = await Song.findByIdAndUpdate(songId, { title, artist, genre, SongPhoto: filePath }, { new: true });
 
         res.status(200).json(updatedSong);
         console.log("Song Edited Successfully!!");
@@ -181,6 +193,7 @@ exports.editSong = async (req, res) => {
         res.status(500).json({ message: "Song Editing Error" });
     }
 }
+
 
 // Get songs by user
 exports.getSongByUser = async (req, res) => {

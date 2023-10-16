@@ -2,6 +2,8 @@
 const Playlist = require('../models/playlistModel');
 const Song = require('../models/songModel');
 const User = require('../models/userModel');
+const fs = require('fs');
+const path = require('path');
 
 // Controller functions for playlist-related actions
 
@@ -22,8 +24,25 @@ exports.createPlaylist = async (req, res) => {
             name,
             creator: id,
             songs: songs || [],
-            playlistPhoto
+            playlistPhoto: '' // Initialize with an empty string for the file path
         });
+
+        if (playlistPhoto) {
+            // Convert the base64-encoded image data to a buffer
+            const imageBuffer = Buffer.from(playlistPhoto, 'base64');
+
+            // Generate a unique file name for the playlist's photo
+            const uniqueFileName = `${newPlaylist._id}-${Date.now()}.jpg`;
+
+            // Define the file path
+            const filePath = path.join(__dirname, 'uploads', uniqueFileName);
+
+            // Write the image data to the file
+            fs.writeFileSync(filePath, imageBuffer);
+
+            // Update the playlist's photo field with the file path
+            newPlaylist.playlistPhoto = filePath;
+        }
 
         // Save the new playlist
         await newPlaylist.save();
@@ -66,8 +85,21 @@ exports.editPlaylist = async (req, res) => {
             playlist.name = name;
         }
 
-        if(playlistPhoto) {
-            playlist.playlistPhoto = playlistPhoto;
+        if (playlistPhoto) {
+            // Convert the base64-encoded image data to a buffer
+            const imageBuffer = Buffer.from(playlistPhoto, 'base64');
+
+            // Generate a unique file name for the playlist's photo
+            const uniqueFileName = `${playlist._id}-${Date.now()}.jpg`;
+
+            // Define the file path
+            const filePath = path.join(__dirname, 'uploads', uniqueFileName);
+
+            // Write the image data to the file
+            fs.writeFileSync(filePath, imageBuffer);
+
+            // Update the playlist's photo field with the new file path
+            playlist.playlistPhoto = filePath;
         }
 
         await playlist.save();
