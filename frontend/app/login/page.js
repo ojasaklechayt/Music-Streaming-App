@@ -5,7 +5,9 @@ import Abstract from '../../public/abstract_figures.png';
 import Link from 'next/link'; // Make sure to import Link
 import Image from 'next/image';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 export default function Login() {
+    const router = useRouter()
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -24,8 +26,19 @@ export default function Login() {
 
         try {
             // Send a POST request using Axios
-            const response = await axios.post('http://localhost:5000/users/login', formData);
-            console.log('Login successful:', response.data);
+            const response = await axios.post('http://localhost:5000/users/login', formData, {
+                // added axios options enable sending cookies with the request
+                withCredentials: true,
+                headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' },
+                credentials: 'include',
+            });
+            console.log('Login successful:', response);
+            if (response.statusText === 'OK') {
+                router.push('/home')
+            }
+
+
+
             // Handle the response or redirection after a successful login.
         } catch (error) {
             console.error('Login failed:', error);

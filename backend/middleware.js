@@ -5,11 +5,11 @@ const catchAsync = require("./utils/catchAsync"); // Import the catchAsync utili
 // Function to generate a JWT token for a user and set it in a cookie
 const generatejwt = async (user, res) => {
     // Extract user information like _id and email
-    const { _id, email } = user;
+    const { _id, email, username } = user;
 
     // Create a JWT token with user data and a secret key, set to expire in 2 hours
     const token = jwt.sign(
-        { user_id: _id, email },
+        { user_id: _id, email, username },
         process.env.TOKEN_KEY, // Use the TOKEN_KEY from environment variables as the secret key
         {
             expiresIn: "2h", // Token expires in 2 hours

@@ -12,7 +12,10 @@ const cookieParser = require('cookie-parser') // Middleware for parsing cookies
 // app.use(bodyParser.json());
 
 // Enable CORS to allow cross-origin requests
-app.use(cors());
+app.use(cors({
+    origin: true, // included origin as true
+    credentials: true //included credentials as true
+}));
 
 // Use middleware to parse cookies
 app.use(cookieParser());
