@@ -4,20 +4,53 @@ import Navbar from '@/components/navbar';
 import Abstract from '../../public/abstract_figures.png';
 import Link from 'next/link'; // Make sure to import Link
 import Image from 'next/image';
+import axios from 'axios';
 
-export default function Login() {
-    const handleLogin = () => {
-        // Add your login logic here
+import { useRouter } from 'next/navigation';
+
+
+export default function Register() {
+
+    const router  = useRouter()
+    
+    const handleRegister = async(e) => {
+        e.preventDefault()
+       
+        try {
+             // Send a POST request using Axios
+             const response = await axios.post('https://music-streaming-app.onrender.com/users/register', formData, {
+                // added axios options enable sending cookies with the request
+                withCredentials: true,
+                headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' },
+                credentials: 'include',
+            });
+            console.log('Login successful:', response);
+            if (response.status === 201) {
+                router.push('/login')
+            }
+
+
+            
+        } catch (error) {
+            console.log(error)
+            
+        }
     }
 
     const handleInputChange = (e) => {
-        // Handle input change
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
     }
 
-    const formData = {
-        email: '', // Initialize with default values
-        password: '', // Initialize with default values
-    };
+    const [formData, setFormData] = useState({
+        username:'',
+        email: '',
+        password: '',
+    });
+
 
     return (
         <div>
@@ -28,7 +61,7 @@ export default function Login() {
                         <Image src={Abstract} className="LOGOO" id="LOGO" alt="Logo" />
                     </div>
 
-                    {/* Login form */}
+                    {/* Register form */}
 
                     <section className="font-poppins rounded-lg w-[450px] z-10">
                         <div className="flex flex-col items-center justify-center px-6 py-8  mx-auto md:h-[50%] rounded-lg lg:py-0">
@@ -39,19 +72,19 @@ export default function Login() {
                                     </h1>
                                     <form className="space-y-4 md:space-y-6">
                                         <div>
-                                            <label htmlFor="email" className="block mb-2 text-sm font-bold text-white">Username</label>
-                                            <input type="email" name="email" id="email" className="bg-[#3A6A70] text-white placeholder-gray-300 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Enter your username" required="" />
+                                            <label htmlFor="username" className="block mb-2 text-sm font-bold text-white">Username</label>
+                                            <input type="text"  onChange={handleInputChange}  name="username" id="username" className="bg-[#3A6A70] text-white placeholder-gray-300 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Enter your username" required />
                                         </div>
                                         <div>
                                             <label htmlFor="email" className="block mb-2 text-sm font-bold text-white">Email</label>
-                                            <input type="email" name="email" id="email" className="bg-[#3A6A70] text-white placeholder-gray-300 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Enter your email" required="" />
+                                            <input type="email" onChange={handleInputChange}  name="email" id="email" className="bg-[#3A6A70] text-white placeholder-gray-300 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Enter your email" required/>
                                         </div>
                                         <div>
                                             <label htmlFor="password" className="block mb-2 text-sm font-bold text-white">Password</label>
-                                            <input type="password" name="password" id="password" placeholder="Enter your password" className="bg-[#3A6A70] text-white placeholder-gray-300 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" required="" />
+                                            <input type="password"  onChange={handleInputChange}  name="password" id="password" placeholder="Enter your password" className="bg-[#3A6A70] text-white placeholder-gray-300 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" required />
                                         </div>
 
-                                        <button type="submit" className="w-[50%] bg-white text-black font-bold rounded-md py-2 mt-7 px-3 sm:px-4 duration-50 text-sm sm:text-base font-poppins hover:bg-gray-300 hover:cursor-pointer transition duration-300 ease-in-out">Register</button>
+                                        <button type="submit" onClick={handleRegister} className="w-[50%] bg-white text-black font-bold rounded-md py-2 mt-7 px-3 sm:px-4 duration-50 text-sm sm:text-base font-poppins hover:bg-gray-300 hover:cursor-pointer transition duration-300 ease-in-out">Register</button>
                                     </form>
                                     <p className="font-poppins text-center mt-2 pt-5">
                                         Already have an account?{" "}

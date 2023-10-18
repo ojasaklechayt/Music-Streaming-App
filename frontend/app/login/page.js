@@ -33,7 +33,7 @@ export default function Login() {
                 credentials: 'include',
             });
             console.log('Login successful:', response);
-            if (response.statusText === 'OK') {
+            if (response.status === 200) {
                 router.push('/home')
             }
 
@@ -76,7 +76,7 @@ export default function Login() {
                                                 onChange={handleInputChange} />
                                         </div>
 
-                                        <button type="submit" className="w-[50%] bg-white text-black font-bold rounded-md py-2 mt-7 px-3 sm:px-4 duration-50 text-sm sm:text-base font-poppins hover:bg-gray-300 hover:cursor-pointer transition duration-300 ease-in-out">Log In</button>
+                                        <button type="submit" onClick={handleLogin} className="w-[50%] bg-white text-black font-bold rounded-md py-2 mt-7 px-3 sm:px-4 duration-50 text-sm sm:text-base font-poppins hover:bg-gray-300 hover:cursor-pointer transition duration-300 ease-in-out">Log In</button>
                                     </form>
                                     <p className="font-poppins text-center mt-2 pt-5">
                                         Don&apos;t have an account?{" "}
