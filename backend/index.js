@@ -15,7 +15,7 @@ app.set("trust proxy", 1);
 app.use(cors({
     origin: true, // included origin as true
     credentials: true,//included credentials as true
-    exposedHeaders: ["Set-cookie"],
+    exposedHeaders: ["Authorization"],
 }));
 
 // Use middleware to parse cookies
