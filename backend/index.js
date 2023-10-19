@@ -4,13 +4,12 @@ require('dotenv').config(); // Load environment variables from a .env file
 const mongoose = require('mongoose'); // MongoDB ORM for database interaction
 const bodyParser = require('body-parser'); // Middleware for parsing request bodies
 const cors = require('cors'); // Middleware for handling Cross-Origin Resource Sharing (CORS)
-const port = 5000; // Port on which the server will run
+const port = process.env.PORT || 5000; // Port on which the server will run
 const app = express(); // Create an instance of the Express application
 const cookieParser = require('cookie-parser') // Middleware for parsing cookies
 
 // Use middleware to parse JSON request bodies
 // app.use(bodyParser.json());
-
 // Enable CORS to allow cross-origin requests
 app.use(cors({
     origin: true, // included origin as true
@@ -22,7 +21,7 @@ app.use(cookieParser());
 
 try {
     // Connect to MongoDB using the URL provided in the .env file
-    mongoose.connect(process.env.MONGODB, { useNewUrlParser: true, useUnifiedTopology: true });
+    mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true });
 
     // Event handlers for MongoDB connection
     mongoose.connection.on('connected', () => {
