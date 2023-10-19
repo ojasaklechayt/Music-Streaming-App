@@ -33,7 +33,7 @@ export default function Login() {
                 credentials: 'include',
             });
             console.log('Login successful:', response);
-            if (response.status === 200) {
+            if (response.statusText === 'OK') {
                 router.push('/home')
             }
 
