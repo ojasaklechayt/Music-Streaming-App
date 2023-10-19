@@ -8,6 +8,7 @@ const port = process.env.PORT || 5000; // Port on which the server will run
 const app = express(); // Create an instance of the Express application
 const cookieParser = require('cookie-parser') // Middleware for parsing cookies
 
+app.set("trust proxy", 1);
 // Use middleware to parse JSON request bodies
 // app.use(bodyParser.json());
 // Enable CORS to allow cross-origin requests

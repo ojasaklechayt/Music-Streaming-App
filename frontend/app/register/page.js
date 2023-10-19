@@ -11,29 +11,24 @@ import { useRouter } from 'next/navigation';
 
 export default function Register() {
 
-    const router  = useRouter()
-    
-    const handleRegister = async(e) => {
+    const router = useRouter()
+
+    const handleRegister = async (e) => {
         e.preventDefault()
-       
+
         try {
-             // Send a POST request using Axios
-             const response = await axios.post('https://music-streaming-app.onrender.com/users/register', formData, {
-                // added axios options enable sending cookies with the request
-                withCredentials: true,
-                headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' },
-                credentials: 'include',
-            });
+            // Send a POST request using Axios
+            const response = await axios.post('https://example-6iqg.onrender.com/users/register', formData);
             console.log('Login successful:', response);
             if (response.status === 201) {
                 router.push('/login')
             }
 
 
-            
+
         } catch (error) {
             console.log(error)
-            
+
         }
     }
 
@@ -46,7 +41,7 @@ export default function Register() {
     }
 
     const [formData, setFormData] = useState({
-        username:'',
+        username: '',
         email: '',
         password: '',
     });
@@ -73,15 +68,15 @@ export default function Register() {
                                     <form className="space-y-4 md:space-y-6">
                                         <div>
                                             <label htmlFor="username" className="block mb-2 text-sm font-bold text-white">Username</label>
-                                            <input type="text"  onChange={handleInputChange}  name="username" id="username" className="bg-[#3A6A70] text-white placeholder-gray-300 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Enter your username" required />
+                                            <input type="text" onChange={handleInputChange} name="username" id="username" className="bg-[#3A6A70] text-white placeholder-gray-300 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Enter your username" required />
                                         </div>
                                         <div>
                                             <label htmlFor="email" className="block mb-2 text-sm font-bold text-white">Email</label>
-                                            <input type="email" onChange={handleInputChange}  name="email" id="email" className="bg-[#3A6A70] text-white placeholder-gray-300 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Enter your email" required/>
+                                            <input type="email" onChange={handleInputChange} name="email" id="email" className="bg-[#3A6A70] text-white placeholder-gray-300 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="Enter your email" required />
                                         </div>
                                         <div>
                                             <label htmlFor="password" className="block mb-2 text-sm font-bold text-white">Password</label>
-                                            <input type="password"  onChange={handleInputChange}  name="password" id="password" placeholder="Enter your password" className="bg-[#3A6A70] text-white placeholder-gray-300 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" required />
+                                            <input type="password" onChange={handleInputChange} name="password" id="password" placeholder="Enter your password" className="bg-[#3A6A70] text-white placeholder-gray-300 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" required />
                                         </div>
 
                                         <button type="submit" onClick={handleRegister} className="w-[50%] bg-white text-black font-bold rounded-md py-2 mt-7 px-3 sm:px-4 duration-50 text-sm sm:text-base font-poppins hover:bg-gray-300 hover:cursor-pointer transition duration-300 ease-in-out">Register</button>
