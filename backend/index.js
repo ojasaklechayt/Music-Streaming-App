@@ -14,7 +14,8 @@ app.set("trust proxy", 1);
 // Enable CORS to allow cross-origin requests
 app.use(cors({
     origin: true, // included origin as true
-    credentials: true //included credentials as true
+    credentials: true,//included credentials as true
+    exposedHeaders: ["Set-cookie"],
 }));
 
 // Use middleware to parse cookies
