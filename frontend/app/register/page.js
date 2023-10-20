@@ -18,7 +18,7 @@ export default function Register() {
 
         try {
             // Send a POST request using Axios
-            const response = await axios.post('https://example-6iqg.onrender.com/users/register', formData);
+            const response = await axios.post('https://music-streaming-app.onrender.com/users/register', formData);
             console.log('Login successful:', response);
             if (response.status === 201) {
                 router.push('/login')
