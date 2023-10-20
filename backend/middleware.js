@@ -3,13 +3,12 @@ const Token = require('./models/tokenModel'); // Import the Token model for work
 const jwt = require("jsonwebtoken"); // Import the JSON Web Token (JWT) package
 const catchAsync = require("./utils/catchAsync"); // Import the catchAsync utility function
 // Function to generate a JWT token for a user and set it in a cookie
-const generatejwt = async (user, res) => {
+const generatejwt = async (id) => {
     // Extract user information like _id and email
-    const { _id, email, username } = user;
 
     // Create a JWT token with user data and a secret key, set to expire in 2 hours
     const token = jwt.sign(
-        { user_id: _id, email, username },
+        { id },
         process.env.TOKEN_KEY, // Use the TOKEN_KEY from environment variables as the secret key
         {
             expiresIn: "2h", // Token expires in 2 hours
@@ -17,7 +16,6 @@ const generatejwt = async (user, res) => {
     );
 
     // Set the token in a cookie named "token"
-    res.cookie("token", token, { httpOnly: true, maxAge: 720000000, secure: true, sameSite: 'strict' });
 
     // Create a new Token record in the database to keep track of tokens
     const tokenRecord = new Token({ token });
@@ -25,8 +23,8 @@ const generatejwt = async (user, res) => {
     // Save the token record to the database
     await tokenRecord.save();
 
-    // Log the generated token for debugging (remove in production)
-    console.log(token);
+    return token
+
 }
 
 // Function to clear the "token" cookie on the client side

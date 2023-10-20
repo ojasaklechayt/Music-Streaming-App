@@ -1,24 +1,25 @@
 // Import necessary packages and modules
 const express = require("express"); // Express.js for building the web application
-require('dotenv').config(); // Load environment variables from a .env file
-const mongoose = require('mongoose'); // MongoDB ORM for database interaction
-const bodyParser = require('body-parser'); // Middleware for parsing request bodies
 const cors = require('cors'); // Middleware for handling Cross-Origin Resource Sharing (CORS)
-const port = process.env.PORT || 5000; // Port on which the server will run
-const app = express(); // Create an instance of the Express application
-const cookieParser = require('cookie-parser') // Middleware for parsing cookies
+var cookieSession = require('cookie-session')
+const mongoose = require('mongoose'); // MongoDB ORM for database interaction
 
-app.set("trust proxy", 1);
-// Use middleware to parse JSON request bodies
-// app.use(bodyParser.json());
+const userRoutes = require('./routes/userRoutes');
+const songRoutes = require('./routes/songRoutes');
+const playlistRoutes = require('./routes/playlistRoutes');
+
+const port = process.env.PORT || 5000; // Port on which the server will run
+require('dotenv').config(); // Load environment variables from a .env file
+const app = express(); // Create an instance of the Express application
+
+
+
 // Enable CORS to allow cross-origin requests
 app.use(cors({
     origin: true, // included origin as true
     credentials: true,//included credentials as true
 }));
 
-// Use middleware to parse cookies
-app.use(cookieParser());
 
 try {
     // Connect to MongoDB using the URL provided in the .env file
@@ -38,9 +39,7 @@ try {
 }
 
 // Import routes for different parts of the application
-const userRoutes = require('./routes/userRoutes');
-const songRoutes = require('./routes/songRoutes');
-const playlistRoutes = require('./routes/playlistRoutes');
+
 
 // Use routes and apply CORS middleware to specific routes
 app.use(express.json({ limit: "50mb" }));

@@ -6,6 +6,8 @@ import Link from 'next/link'; // Make sure to import Link
 import Image from 'next/image';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import { Cookie } from 'next/font/google';
+import Cookies from 'js-cookie';
 export default function Login() {
     const router = useRouter()
     const [formData, setFormData] = useState({
@@ -26,8 +28,8 @@ export default function Login() {
 
         try {
             // Send a POST request using Axios
-            const response = await axios.post('https://tangible-death-production.up.railway.app/users/login', formData, {
-                // const response = await axios.post('http://localhost:5000/users/login', formData, {
+            // const response = await axios.post('https://tangible-death-production.up.railway.app/users/login', formData, {
+            const response = await axios.post('http://localhost:5000/users/login', formData, {
                 // added axios options enable sending cookies with the request
                 withCredentials: true,
                 headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' },
@@ -35,6 +37,10 @@ export default function Login() {
             });
             console.log('Login successful:', response);
 
+            const { token } = response.data
+            if (token) {
+                Cookies.set('token', token, { expires: 2 / 24 })
+            }
 
 
             // Handle the response or redirection after a successful login.
