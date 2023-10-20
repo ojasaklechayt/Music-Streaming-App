@@ -56,16 +56,10 @@ exports.login = async (req, res) => {
             return res.status(401).json({ message: 'Wrong Password Given' });
         }
 
-        const tokenData = {
-            id: user._id,
-            username: user.username,
-            email: user.email
-        }
 
-        generatejwt(user, res);
+        const token = await generatejwt(user._id);
 
-        // console.log(Usertoken);
-        res.status(200).json({ status: 'success', tokenData });
+        res.status(200).json({ status: 'success', token });
         // res.status(200).json({message:"Successfull"});
     } catch (error) {
         console.error('Error Login User: ', error);

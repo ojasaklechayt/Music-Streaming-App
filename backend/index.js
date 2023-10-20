@@ -1,28 +1,28 @@
 // Import necessary packages and modules
 const express = require("express"); // Express.js for building the web application
-require('dotenv').config(); // Load environment variables from a .env file
-const mongoose = require('mongoose'); // MongoDB ORM for database interaction
-const bodyParser = require('body-parser'); // Middleware for parsing request bodies
 const cors = require('cors'); // Middleware for handling Cross-Origin Resource Sharing (CORS)
-const port = 5000; // Port on which the server will run
-const app = express(); // Create an instance of the Express application
-const cookieParser = require('cookie-parser') // Middleware for parsing cookies
+const mongoose = require('mongoose'); // MongoDB ORM for database interaction
 
-// Use middleware to parse JSON request bodies
-// app.use(bodyParser.json());
+const userRoutes = require('./routes/userRoutes');
+const songRoutes = require('./routes/songRoutes');
+const playlistRoutes = require('./routes/playlistRoutes');
+
+const port = process.env.PORT || 5000; // Port on which the server will run
+require('dotenv').config(); // Load environment variables from a .env file
+const app = express(); // Create an instance of the Express application
+
+
 
 // Enable CORS to allow cross-origin requests
 app.use(cors({
     origin: true, // included origin as true
-    credentials: true //included credentials as true
+    credentials: true,//included credentials as true
 }));
 
-// Use middleware to parse cookies
-app.use(cookieParser());
 
 try {
     // Connect to MongoDB using the URL provided in the .env file
-    mongoose.connect(process.env.MONGODB, { useNewUrlParser: true, useUnifiedTopology: true });
+    mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true });
 
     // Event handlers for MongoDB connection
     mongoose.connection.on('connected', () => {
@@ -38,9 +38,7 @@ try {
 }
 
 // Import routes for different parts of the application
-const userRoutes = require('./routes/userRoutes');
-const songRoutes = require('./routes/songRoutes');
-const playlistRoutes = require('./routes/playlistRoutes');
+
 
 // Use routes and apply CORS middleware to specific routes
 app.use(express.json({ limit: "50mb" }));
@@ -50,7 +48,7 @@ app.use('/songs', songRoutes);
 app.use('/playlists', playlistRoutes);
 
 // Define a default route that responds with a welcome message
-app.use('/', cors(), (req, res) => {
+app.use('/', (req, res) => {
     res.send("Welcome to our music app");
 })
 
