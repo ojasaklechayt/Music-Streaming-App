@@ -28,8 +28,8 @@ export default function Login() {
 
         try {
             // Send a POST request using Axios
-            // const response = await axios.post('https://tangible-death-production.up.railway.app/users/login', formData, {
-            const response = await axios.post('http://localhost:5000/users/login', formData, {
+            const response = await axios.post('https://tangible-death-production.up.railway.app/users/login', formData, {
+                // const response = await axios.post('http://localhost:5000/users/login', formData, {
                 // added axios options enable sending cookies with the request
                 withCredentials: true,
                 headers: { 'Access-Control-Allow-Origin': '*', 'Content-Type': 'application/json' },
