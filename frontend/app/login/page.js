@@ -13,6 +13,7 @@ export default function Login() {
         password: '',
     });
 
+    //Welcome to Hacktoberfest!!
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData({
