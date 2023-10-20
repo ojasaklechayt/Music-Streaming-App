@@ -17,7 +17,7 @@ const generatejwt = async (user, res) => {
     );
 
     // Set the token in a cookie named "token"
-    res.cookie("token", token, { domain: '.onrender.com', sameSite: 'none' });
+    res.cookie("token", token, { httpOnly: true });
 
     // Create a new Token record in the database to keep track of tokens
     const tokenRecord = new Token({ token });
