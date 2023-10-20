@@ -54,13 +54,13 @@ Feel free to open an issue if you find a bug or want to suggest a feature.
 ## Tech Stack
 
 - Front-End:
-  Nextjs,
+  Next.js,
   Tailwind CSS,
 - Linting and Code Quality:
   ESLint,
 - Backend:
-  Expressjs,
-  MongoDb,
+  Express.js,
+  MongoDB,
   Mongoose,
   Multer,
 
