@@ -1,7 +1,6 @@
 // Import necessary packages and modules
 const express = require("express"); // Express.js for building the web application
 const cors = require('cors'); // Middleware for handling Cross-Origin Resource Sharing (CORS)
-var cookieSession = require('cookie-session')
 const mongoose = require('mongoose'); // MongoDB ORM for database interaction
 
 const userRoutes = require('./routes/userRoutes');
