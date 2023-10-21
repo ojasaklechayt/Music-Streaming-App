@@ -18,7 +18,6 @@ export default function RootLayout({ children }) {
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Koulen&display=swap"
         />
-        <link rel="icon" href="../public/groomwave_icon.ico" />
       </Head>
       <body className={inter.className}>{children}</body>
     </html>
