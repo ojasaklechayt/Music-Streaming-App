@@ -59,7 +59,8 @@
 
 Our music streaming app redefines how you enjoy and discover music.
 
-<img src="app.png" alt="Screenshot of the app">
+![image](https://github.com/ojasaklechayt/Music-Streaming-App/assets/90605717/23c2e493-6a1e-4fc7-8033-375b431e150b)
+
 
 ## Tech Stack
 - Front-End:
