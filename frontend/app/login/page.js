@@ -63,7 +63,7 @@ export default function Login() {
 
                     <section className="font-poppins rounded-lg w-[450px] z-10">
                         <div className="flex flex-col items-center justify-center px-6 py-8  mx-auto md:h-[50%] rounded-lg lg:py-0">
-                            <div className="w-full md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+                            <div className="w-full md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700 rounded-lg">
                                 <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
                                     <h1 className="text-xl text-center font-bold leading-tight tracking-tight md:text-2xl text-white">
                                         LOGIN
@@ -80,7 +80,7 @@ export default function Login() {
                                                 onChange={handleInputChange} />
                                         </div>
 
-                                        <button type="submit" className="w-[50%] bg-white text-black font-bold rounded-md py-2 mt-7 px-3 sm:px-4 duration-50 text-sm sm:text-base font-poppins hover:bg-gray-300 hover:cursor-pointer transition duration-300 ease-in-out">Log In</button>
+                                        <button type="submit" className="w-100 bg-white text-black font-bold rounded-md py-2 mt-7 px-3 sm:px-4 duration-50 text-sm sm:text-base font-poppins hover:bg-gray-300 hover:cursor-pointer transition duration-300 ease-in-out w-full">Log In</button>
                                     </form>
                                     <p className="font-poppins text-center mt-2 pt-5">
                                         Don&apos;t have an account?{" "}
