@@ -59,7 +59,7 @@
 
 Our music streaming app redefines how you enjoy and discover music.
 
-<img src="app.png" alt="Logo">
+<img src="app.png" alt="Screenshot of the app">
 
 ## Tech Stack
 - Front-End:
