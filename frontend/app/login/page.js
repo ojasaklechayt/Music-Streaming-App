@@ -1,4 +1,5 @@
 'use client'
+
 import { useState } from 'react';
 import Navbar from '@/components/navbar';
 import Abstract from '../../public/abstract_figures.png';
@@ -7,9 +8,11 @@ import Image from 'next/image';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { Cookie } from 'next/font/google';
-import Cookies from 'js-cookie';
+import { useSetAuthToken } from '@/context/AuthProvider';
+
 export default function Login() {
     const router = useRouter()
+    const setAuthToken = useSetAuthToken()
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -38,7 +41,7 @@ export default function Login() {
 
             const { token } = response.data
             if (token) {
-                Cookies.set('token', token, { expires: 2 / 24 })
+                setAuthToken(token)
                 router.push('/home')
             }
 
@@ -56,7 +59,7 @@ export default function Login() {
             <div className="bg-gradient-to-b from-[#181616] to-[#052A4D] flex min-h-screen flex-col items-center justify-center overflow-hidden">
                 <div className="flex flex-col md:flex-row justify-center items-center w-screen h-screen gap-x-[10%] px-10 z-1">
                     <div className="hidden md:block">
-                        <Image src={Abstract} className="LOGOO" id="LOGO" alt="Logo" />
+                        <Image src={Abstract} className="LOGO" id="LOGO" alt="Logo" />
                     </div>
 
                     {/* Login form */}

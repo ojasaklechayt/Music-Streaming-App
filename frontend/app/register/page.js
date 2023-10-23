@@ -53,7 +53,7 @@ export default function Register() {
             <div className="bg-gradient-to-b from-[#181616] to-[#052A4D] flex min-h-screen flex-col items-center justify-center overflow-hidden">
                 <div className="flex flex-col md:flex-row justify-center items-center w-screen h-screen gap-x-[10%] px-10 z-1">
                     <div className="hidden md:block">
-                        <Image src={Abstract} className="LOGOO" id="LOGO" alt="Logo" />
+                        <Image src={Abstract} className="LOGO" id="LOGO" alt="Logo" />
                     </div>
 
                     {/* Register form */}
