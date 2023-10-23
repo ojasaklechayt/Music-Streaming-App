@@ -1,6 +1,10 @@
 import Head from 'next/head'
-import './globals.css'
+import { cookies } from 'next/headers'
 import { Inter } from 'next/font/google'
+
+import './globals.css'
+import Providers from './Providers'
+import { AUTH_TOKEN_KEY } from '@/utils/constants'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -10,6 +14,9 @@ export const metadata = {
 }
 
 export default function RootLayout({ children }) {
+  const cookieStorage = cookies()
+  const reqAuthToken = cookieStorage.get(AUTH_TOKEN_KEY)
+
   return (
     <html lang="en">
       <Head>
@@ -18,7 +25,11 @@ export default function RootLayout({ children }) {
           href="https://fonts.googleapis.com/css2?family=Koulen&display=swap"
         />
       </Head>
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <Providers reqAuthToken={reqAuthToken}>
+          {children}
+        </Providers>
+      </body>
     </html>
   )
 }
