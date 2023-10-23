@@ -7,11 +7,10 @@ const userRoutes = require('./routes/userRoutes');
 const songRoutes = require('./routes/songRoutes');
 const playlistRoutes = require('./routes/playlistRoutes');
 
-const port = process.env.PORT || 5000; // Port on which the server will run
 require('dotenv').config(); // Load environment variables from a .env file
+
+const port = process.env.PORT || 5000; // Port on which the server will run
 const app = express(); // Create an instance of the Express application
-
-
 
 // Enable CORS to allow cross-origin requests
 app.use(cors({
