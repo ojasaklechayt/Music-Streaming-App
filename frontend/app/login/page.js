@@ -29,12 +29,10 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      // Send a POST request using Axios
       const response = await axios.post(
         "https://music-streaming-app.onrender.com/users/login",
         formData,
         {
-          // added axios options enable sending cookies with the request
           withCredentials: true,
           headers: {
             "Access-Control-Allow-Origin": "*",
@@ -48,15 +46,25 @@ export default function Login() {
       const { token } = response.data;
       if (token) {
         toast.success("User Login successfully");
+
+        // Set the token in a cookie
         Cookies.set("token", token, { expires: 2 / 24 });
+
+        // Redirect to the home page
         router.push("/home");
       }
-
-      // Handle the response or redirection after a successful login.
     } catch (error) {
-      toast.error("User Login failed");
-      console.error("Login failed:", error);
-      // Handle the error, show a message, or do something else on failure.
+      if (error.response) {
+        if (error.response.status === 401) {
+          toast.error(error.response.data.message);
+        } else {
+          toast.error("User Login failed");
+          console.error("Login failed:", error);
+        }
+      } else {
+        toast.error("An error occurred while logging in.");
+        console.error("Login failed:", error);
+      }
     }
   };
 

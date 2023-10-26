@@ -17,19 +17,30 @@ export default function Register() {
     e.preventDefault();
 
     try {
-      // Send a POST request using Axios
       const response = await axios.post(
         "https://music-streaming-app.onrender.com/users/register",
         formData
       );
-      console.log("Login successful:", response);
+      console.log("Registration successful:", response);
       if (response.status === 201) {
-        toast.success("User Registeres Successfully");
+        toast.success("User Registered Successfully");
         router.push("/login");
       }
     } catch (error) {
-      console.log(error);
-      toast.error("user Registration failed");
+      if (error.response) {
+        if (
+          error.response.status === 400 &&
+          error.response.data.message === "User already exists"
+        ) {
+          toast.error("User already exists");
+        } else {
+          console.log(error);
+          toast.error("User Registration failed");
+        }
+      } else {
+        console.log(error);
+        toast.error("An error occurred while registering.");
+      }
     }
   };
 
