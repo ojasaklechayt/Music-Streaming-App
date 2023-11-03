@@ -21,13 +21,14 @@ export default function Home() {
       </Head>
 
       <Header />
-      <main className="container mx-auto mt-8">
-        <div className="flex">
-          <Playlist songs={songs} />
+      <main className="container mx-auto mt-8 mb-20">
+        <div className="flex flex-col">
+          <Playlist songs={songs} type={"Popular"}/>
           <SongDisplay songs={songs} />
+          <Playlist songs={songs} type={"My"}/>
         </div>
       </main>
-      <Player />
+      <Player className="z-10"/>
     </div>
   );
 }

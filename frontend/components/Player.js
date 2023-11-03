@@ -1,7 +1,8 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import { FaPlay, FaPause, FaStepBackward, FaStepForward, FaVolumeUp, FaVolumeMute } from 'react-icons/fa';
-import imagepath from '../assets/songphoto.png';
+
+const imagepath = "https://i1.sndcdn.com/artworks-ykhavMzzmobOTXYI-vm7RSg-t500x500.jpg";
 
 const Player = () => {
     const [isPlaying, setIsPlaying] = useState(false);
@@ -113,7 +114,7 @@ const Player = () => {
     }, [paused, playbackPosition, isPlaying]);
 
     return (
-        <div className="bg-white bg-opacity-10 text-white p-4 fixed bottom-0 w-full">
+        <div className="bg-gray-900 text-white p-4 fixed bottom-0 w-full">
             <div className="container mx-auto relative">
                 <div className="absolute inset-0 rounded-lg"></div>
                 <div className="flex items-center justify-between relative z-10">
