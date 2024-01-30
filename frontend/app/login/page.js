@@ -9,6 +9,8 @@ import Image from "next/image";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { Cookie } from "next/font/google";
+import {motion } from 'framer-motion';
+import { fadeIn } from "@/Motion/variants";
 import Cookies from "js-cookie";
 export default function Login() {
   const router = useRouter();
@@ -73,13 +75,13 @@ export default function Login() {
       <Navbar />
       <div className="bg-gradient-to-b from-[#181616] to-[#052A4D] flex min-h-screen flex-col items-center justify-center overflow-hidden">
         <div className="flex flex-col md:flex-row justify-center items-center w-screen h-screen gap-x-[10%] px-10 z-1">
-          <div className="hidden md:block">
+          <motion.div variants={fadeIn(3.2,100)} initial="hidden" whileInView={"show"} viewport={{once: false, amount: 0.7}} className="hidden md:block">
             <Image src={Abstract} className="LOGOO" id="LOGO" alt="Logo" />
-          </div>
+          </motion.div>
 
           {/* Login form */}
 
-          <section className="font-poppins rounded-lg w-[450px] z-10">
+          <motion.section variants={fadeIn(3.2,-100)} initial="hidden" whileInView={"show"} viewport={{once: false, amount: 0.7}} className="font-poppins rounded-lg w-[450px] z-10">
             <div className="flex flex-col items-center justify-center px-6 py-8  mx-auto md:h-[50%] rounded-lg lg:py-0">
               <div className="w-full md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
                 <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
@@ -150,7 +152,7 @@ export default function Login() {
                 </div>
               </div>
             </div>
-          </section>
+          </motion.section>
         </div>
       </div>
       <ToastContainer
