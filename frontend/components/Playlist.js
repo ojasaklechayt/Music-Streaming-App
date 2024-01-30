@@ -39,7 +39,7 @@ const Playlist = (props) => {
                 {playlists.map((playlist, index) => (
                     <div
                         key={index}
-                        className={`inline-block w-64 p-4 m-2 rounded-lg shadow-lg transition-transform transform hover:scale-105 ${activeIndex === index ? 'bg-indigo-100' : 'bg-gray-200'
+                        className={`inline-block w-64 p-2 m-2 rounded-lg shadow-lg hover:cursor-pointer transition-transform transform hover:scale-105 ${activeIndex === index ? 'bg-indigo-100' : 'bg-gray-200'
                             }`}
                         onMouseEnter={() => handlePlaylistHover(index)}
                         onMouseLeave={handlePlaylistLeave}
